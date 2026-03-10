@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1750.37 510">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: url(#linear-gradient);
+      }
+
+      .cls-2 {
+        fill: #ff0073;
+      }
+
+      .cls-3 {
+        fill: #fff;
+        font-family: Poppins-Bold, Poppins;
+        font-size: 219.76px;
+        font-weight: 700;
+      }
+    </style>
+    <linearGradient id="linear-gradient" x1="155.91" y1="273.2" x2="268.19" y2="-103.6" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ff0073"/>
+      <stop offset=".43" stop-color="#ff5129"/>
+    </linearGradient>
+  </defs>
+  <g id="Layer_1-2" data-name="Layer 1">
+    <path class="cls-1" d="M349.37,328.46l-52.84,27.58L58.62,227.34C23.48,207.71,0,173.4,0,135.52V0l349.37,186.88c60.26,31.46,60.26,110.11,0,141.57Z"/>
+    <path class="cls-2" d="M260.98,373.77L0,510v-219.6c0-24.06,25.53-39.53,46.86-28.4l214.12,111.77Z"/>
+    <text class="cls-3" transform="translate(437.72 329.14)"><tspan x="0" y="0">IPTVantage</tspan></text>
+  </g>
+</svg>
