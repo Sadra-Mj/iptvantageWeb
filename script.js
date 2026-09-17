@@ -341,7 +341,6 @@ document.addEventListener('DOMContentLoaded', () => {
         selectedPrice.textContent = formatPrice(duration.price);
         selectedDuration.textContent = duration.label;
         subscribeButton.dataset.productId = duration.id;
-        subscribeButton.href = `https://t.me/${encodeURIComponent(PAYMENT_BOT_USERNAME)}?start=${encodeURIComponent(duration.id)}`;
 
         durationOptions.querySelectorAll('.duration-option').forEach((button) => {
             const isSelected = button.dataset.productId === duration.id;

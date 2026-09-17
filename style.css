@@ -1503,6 +1503,15 @@ nav {
     box-shadow: 0 16px 36px color-mix(in srgb, var(--tier-accent) 40%, transparent);
 }
 
+.btn-subscribe.is-disabled,
+.btn-subscribe.is-disabled:hover {
+    cursor: not-allowed;
+    opacity: 0.58;
+    transform: none;
+    box-shadow: none;
+    filter: saturate(0.55);
+}
+
 .telegram-note {
     margin-top: 0.85rem;
     color: #6f7b91;
