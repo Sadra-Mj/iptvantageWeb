@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="assets/tabLogo.png" type="image/x-icon">
+    <link rel="icon" href="assets/tabLogo.png" type="image/png">
     <title>IPTVantage</title>
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -286,69 +286,129 @@
     <!-- Pricing Section -->
     <section class="pricing-section" id="Subscribe">
         <div class="pricing-header">
-            <h2>CHOOSE YOUR FAVORITE PLAN!</h2>
-            <p>All Include Premium Servers</p>
+            <span class="section-eyebrow">Find your perfect plan</span>
+            <h2>SUBSCRIBE NOW</h2>
+            <p>Explore the plans first. Once you choose one, its duration and price options come to life.</p>
         </div>
-        <div class="pricing-container">
-            <div class="pricing-card">
-                <h3>MONTHLY</h3>
-                <p class="price">€12.99</p>
-                <ul>
-                    <li>SD, HD, FHD, 4K & 8K</li>
-                    <li>Full Package</li>
-                    <li>+ 41,000 Live Channel</li>
-                    <li>+ 139,000 Movies</li>
-                    <li>+ 35,000 Series</li>
-                    <li>Adult Content +18 (Optional)</li>
-                    <li>Auto Update (Daily)</li>
-                    <li>Technical Support</li>
-                </ul>
-                <a href="https://t.me/iptvantage" class="btn-subscribe">Subscribe</a>
+        <div class="pricing-container subscription-container">
+            <div class="pricing-step-heading">
+                <div>
+                    <h3>Choose your plan</h3>
+                    <p>Compare what each plan includes, then choose the experience that fits you.</p>
+                </div>
             </div>
-            <div class="pricing-card">
-                <h3>3 MONTHS</h3>
-                <p class="price">€28.99</p>
-                <ul>
-                    <li>SD, HD, FHD, 4K & 8K</li>
-                    <li>Full Package</li>
-                    <li>+ 41,000 Live Channel</li>
-                    <li>+ 139,000 Movies</li>
-                    <li>+ 35,000 Series</li>
-                    <li>Adult Content +18 (Optional)</li>
-                    <li>Auto Update (Daily)</li>
-                    <li>Technical Support</li>
-                </ul>
-                <a href="https://t.me/iptvantage" class="btn-subscribe">Subscribe</a>
+
+            <div class="plan-choices" role="radiogroup" aria-label="Subscription plan">
+                <button class="plan-choice plan-standard" type="button" role="radio" data-plan="standard"
+                    aria-checked="false">
+                    <span class="plan-choice-topline">
+                        <span class="plan-choice-name">Standard</span>
+                    </span>
+                    <span class="plan-choice-description">A flexible, simple way to start streaming everything you love.</span>
+                    <span class="plan-choice-divider" aria-hidden="true"></span>
+                    <span class="plan-choice-benefits">
+                        <span><small>Quality</small><strong>SD, HD, FHD</strong></span>
+                        <span><small>Package</small><strong>Essential</strong></span>
+                        <span><small>Channels</small><strong>Standard selection</strong></span>
+                        <span><small>Movies &amp; Series</small><strong>Included</strong></span>
+                        <span class="feature-unavailable"><small>Adult</small><strong>&mdash;</strong></span>
+                        <span><small>Sports</small><strong>Regular channels</strong></span>
+                        <span><small>Updates</small><strong>Regular</strong></span>
+                        <span><small>Support</small><strong>Standard</strong></span>
+                    </span>
+                    <span class="plan-choice-action">Choose Standard <span aria-hidden="true">&rarr;</span></span>
+                </button>
+
+                <button class="plan-choice plan-gold" type="button" role="radio" data-plan="gold"
+                    aria-checked="false">
+                    <span class="plan-choice-topline">
+                        <span class="plan-choice-name">Gold</span>
+                    </span>
+                    <span class="plan-choice-description">Made for committed viewers who want more long-term value.</span>
+                    <span class="plan-choice-divider" aria-hidden="true"></span>
+                    <span class="plan-choice-benefits">
+                        <span><small>Quality</small><strong>SD, HD, FHD, 4K</strong></span>
+                        <span><small>Package</small><strong>Extended</strong></span>
+                        <span><small>Channels</small><strong>Larger selection</strong></span>
+                        <span><small>Movies &amp; Series</small><strong>Larger library</strong></span>
+                        <span><small>Adult</small><strong>Adult live channels</strong></span>
+                        <span><small>Sports</small><strong>Regular sports</strong></span>
+                        <span><small>Updates</small><strong>Auto updates</strong></span>
+                        <span><small>Support</small><strong>Technical support</strong></span>
+                    </span>
+                    <span class="plan-choice-action">Choose Gold <span aria-hidden="true">&rarr;</span></span>
+                </button>
+
+                <button class="plan-choice plan-premium" type="button" role="radio" data-plan="premium"
+                    aria-checked="false">
+                    <span class="recommended-badge">Recommended</span>
+                    <span class="plan-choice-topline">
+                        <span class="plan-choice-name">Premium</span>
+                    </span>
+                    <span class="plan-choice-description">The ultimate IPTVantage experience for serious entertainment.</span>
+                    <span class="plan-choice-divider" aria-hidden="true"></span>
+                    <span class="plan-choice-benefits">
+                        <span><small>Quality</small><strong>SD, HD, FHD, 4K &amp; 8K</strong></span>
+                        <span><small>Package</small><strong>Full package</strong></span>
+                        <span><small>Channels</small><strong>41,000+ full access</strong></span>
+                        <span><small>Movies &amp; Series</small><strong>Full library</strong></span>
+                        <span><small>Adult</small><strong>Adult full package</strong></span>
+                        <span><small>Sports</small><strong>Premium Sports Hub / Special Sports Folder</strong></span>
+                        <span><small>Updates</small><strong>Daily auto updates</strong></span>
+                        <span><small>Support</small><strong>Priority technical support</strong></span>
+                    </span>
+                    <span class="plan-choice-action">Choose Premium <span aria-hidden="true">&rarr;</span></span>
+                </button>
             </div>
-            <div class="pricing-card">
-                <h3>6 MONTHS</h3>
-                <p class="price">€49.50</p>
-                <ul>
-                    <li>SD, HD, FHD, 4K & 8K</li>
-                    <li>Full Package</li>
-                    <li>+ 41,000 Live Channel</li>
-                    <li>+ 139,000 Movies</li>
-                    <li>+ 35,000 Series</li>
-                    <li>Adult Content +18 (Optional)</li>
-                    <li>Auto Update (Daily)</li>
-                    <li>Technical Support</li>
-                </ul>
-                <a href="https://t.me/iptvantage" class="btn-subscribe">Subscribe</a>
-            </div>
-            <div class="pricing-card highlighted">
-                <h3>12 MONTHS</h3>
-                <p class="price">€79.99</p>
-                <ul>
-                    <li>SD, HD, FHD, 4K & 8K</li>
-                    <li>Full Package</li>
-                    <li>+ 41,000 Live Channel</li>
-                    <li>+ 139,000 Movies</li>
-                    <li>+ 35,000 Series</li>
-                    <li>Adult Content +18 (Optional)</li>
-                    <li>Auto Update (Daily)</li>
-                    <li>Technical Support</li>
-                </ul>
-                <a href="https://t.me/iptvantage" class="btn-subscribe">Subscribe</a>
+
+            <div class="subscription-workspace" hidden>
+                <div class="duration-panel">
+                    <div class="pricing-step-heading compact">
+                        <div>
+                            <h3>Make it yours</h3>
+                            <p>Choose how long you want to enjoy your selected plan.</p>
+                        </div>
+                    </div>
+
+                    <div class="selected-plan-heading">
+                        <div>
+                            <span class="selected-label">Selected plan</span>
+                            <h3 id="selected-plan-name">PREMIUM</h3>
+                        </div>
+                        <p id="selected-plan-description">The ultimate IPTV experience</p>
+                    </div>
+
+                    <div id="duration-options" class="duration-options" role="radiogroup"
+                        aria-label="Subscription duration"></div>
+                </div>
+
+                <aside class="checkout-summary" aria-live="polite">
+                    <span class="summary-kicker">Your selection</span>
+                    <h3 id="summary-plan-name">Premium</h3>
+                    <p id="selected-price" class="price">€99.99</p>
+                    <p id="selected-duration" class="selected-duration">12 Months</p>
+
+                    <div class="summary-divider"></div>
+                    <div class="summary-row">
+                        <span>Package</span>
+                        <strong id="summary-package">Premium</strong>
+                    </div>
+                    <div class="summary-row">
+                        <span>Access</span>
+                        <strong>Full package</strong>
+                    </div>
+
+                    <a id="subscribe-button" class="btn-subscribe"
+                        href="https://t.me/iptvantage"
+                        target="_blank" rel="noopener noreferrer"
+                        data-product-id="premium_12m">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M21.6 2.4 2.9 9.6c-1.3.5-1.3 1.2-.2 1.5l4.8 1.5 1.8 5.5c.2.6.1.9.8.9.5 0 .8-.2 1-.4l2.3-2.2 4.8 3.5c.9.5 1.5.2 1.8-.8L23 4c.4-1.3-.5-1.9-1.4-1.6ZM9.4 12.3l9.3-5.9c.5-.3.9-.1.6.2l-7.7 7-0.3 3.1-1.9-4.4Z"/>
+                        </svg>
+                        Get this plan
+                    </a>
+                    <p class="telegram-note">Your order is completed securely through VantagePay on Telegram.</p>
+                </aside>
             </div>
         </div>
     </section>
@@ -629,6 +689,7 @@
         </div>
     </div>
 
+    <script src="payment-bot-config.js"></script>
     <script src="script.js"></script>
 </body>
 

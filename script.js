@@ -1,3 +1,47 @@
+// Keep the website dependency-free so it works on static hosting and when
+// index.html is opened directly from disk. The bot validates the same product
+// IDs and prices from subscription-plans.mjs before it creates an order.
+const SUBSCRIPTION_PLANS = Object.freeze({
+    standard: Object.freeze({
+        id: 'standard',
+        name: 'Standard',
+        description: 'Everything you need to start streaming',
+        durations: Object.freeze([
+            Object.freeze({ id: 'standard_1m', months: 1, label: '1 Month', price: 14.99 }),
+            Object.freeze({ id: 'standard_3m', months: 3, label: '3 Months', price: 34.99 }),
+            Object.freeze({ id: 'standard_6m', months: 6, label: '6 Months', price: 49.99 }),
+            Object.freeze({ id: 'standard_12m', months: 12, label: '1 Year', price: 69.99 })
+        ])
+    }),
+    gold: Object.freeze({
+        id: 'gold',
+        name: 'Gold',
+        description: 'More value for committed viewers',
+        durations: Object.freeze([
+            Object.freeze({ id: 'gold_3m', months: 3, label: '3 Months', price: 44.99 }),
+            Object.freeze({ id: 'gold_6m', months: 6, label: '6 Months', price: 59.99 }),
+            Object.freeze({ id: 'gold_12m', months: 12, label: '1 Year', price: 84.99 })
+        ])
+    }),
+    premium: Object.freeze({
+        id: 'premium',
+        name: 'Premium',
+        description: 'The ultimate IPTV experience',
+        durations: Object.freeze([
+            Object.freeze({ id: 'premium_6m', months: 6, label: '6 Months', price: 74.99 }),
+            Object.freeze({
+                id: 'premium_12m',
+                months: 12,
+                label: '1 Year',
+                price: 99.99,
+                badge: 'BEST VALUE'
+            })
+        ])
+    })
+});
+
+const PAYMENT_BOT_USERNAME = window.IPTVANTAGE_CONFIG?.paymentBotUsername || 'vantagepaybot';
+
 document.addEventListener('DOMContentLoaded', () => {
     // --- Carousel Logic ---
     const slides = document.querySelectorAll('.carousel-slide');
@@ -70,11 +114,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function loadChannel(url) {
         if (hls) hls.destroy();
-        if (Hls.isSupported() && video) {
-            hls = new Hls();
+        if (video && typeof window.Hls !== 'undefined' && window.Hls.isSupported()) {
+            hls = new window.Hls();
             hls.loadSource(url);
             hls.attachMedia(video);
-            hls.on(Hls.Events.MANIFEST_PARSED, () => video.play());
+            hls.on(window.Hls.Events.MANIFEST_PARSED, () => video.play());
         } else if (video && video.canPlayType('application/vnd.apple.mpegurl')) {
             video.src = url;
             video.addEventListener('loadedmetadata', () => video.play());
@@ -239,6 +283,169 @@ document.addEventListener('DOMContentLoaded', () => {
             tabContents.forEach(content => {
                 content.classList.toggle('active', content.id === tab);
             });
+        });
+    });
+
+    // --- Subscription Selector & Telegram Bot Link ---
+    const planChoices = document.querySelectorAll('.plan-choice');
+    const subscriptionWorkspace = document.querySelector('.subscription-workspace');
+    const planName = document.getElementById('selected-plan-name');
+    const planDescription = document.getElementById('selected-plan-description');
+    const summaryPlanName = document.getElementById('summary-plan-name');
+    const summaryPackage = document.getElementById('summary-package');
+    const durationOptions = document.getElementById('duration-options');
+    const selectedPrice = document.getElementById('selected-price');
+    const selectedDuration = document.getElementById('selected-duration');
+    const subscribeButton = document.getElementById('subscribe-button');
+    let selectedPlanId = null;
+    let subscriptionScrollFrame = null;
+    let hasAutoScrolledToOptions = false;
+
+    function glideTo(targetY, duration = 1050) {
+        const startY = window.scrollY;
+        const maxY = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+        const destination = Math.max(0, Math.min(targetY, maxY));
+        const distance = destination - startY;
+
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            window.scrollTo(0, destination);
+            return;
+        }
+
+        if (subscriptionScrollFrame) cancelAnimationFrame(subscriptionScrollFrame);
+        const startTime = performance.now();
+        const easeInOutQuint = (progress) => progress < 0.5
+            ? 16 * progress ** 5
+            : 1 - ((-2 * progress + 2) ** 5) / 2;
+
+        const animateScroll = (currentTime) => {
+            const progress = Math.min((currentTime - startTime) / duration, 1);
+            window.scrollTo(0, startY + distance * easeInOutQuint(progress));
+
+            if (progress < 1) {
+                subscriptionScrollFrame = requestAnimationFrame(animateScroll);
+            } else {
+                subscriptionScrollFrame = null;
+            }
+        };
+
+        subscriptionScrollFrame = requestAnimationFrame(animateScroll);
+    }
+
+    const formatPrice = (price) => new Intl.NumberFormat('en-IE', {
+        style: 'currency',
+        currency: 'EUR'
+    }).format(price);
+
+    function selectDuration(duration) {
+        selectedPrice.textContent = formatPrice(duration.price);
+        selectedDuration.textContent = duration.label;
+        subscribeButton.dataset.productId = duration.id;
+        subscribeButton.href = `https://t.me/${encodeURIComponent(PAYMENT_BOT_USERNAME)}?start=${encodeURIComponent(duration.id)}`;
+
+        durationOptions.querySelectorAll('.duration-option').forEach((button) => {
+            const isSelected = button.dataset.productId === duration.id;
+            button.classList.toggle('active', isSelected);
+            button.setAttribute('aria-checked', String(isSelected));
+        });
+    }
+
+    function renderPlan(planId) {
+        const plan = SUBSCRIPTION_PLANS[planId];
+        if (!plan || !durationOptions) return;
+
+        selectedPlanId = planId;
+        subscriptionWorkspace.hidden = false;
+        subscriptionWorkspace.classList.remove('tier-standard', 'tier-gold', 'tier-premium');
+        subscriptionWorkspace.classList.add(`tier-${planId}`);
+        planName.textContent = plan.name.toUpperCase();
+        planDescription.textContent = plan.description;
+        summaryPlanName.textContent = plan.name;
+        summaryPackage.textContent = plan.name;
+        durationOptions.replaceChildren();
+
+        plan.durations.forEach((duration, index) => {
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.className = 'duration-option';
+            button.style.setProperty('--option-index', index);
+            button.dataset.productId = duration.id;
+            button.setAttribute('role', 'radio');
+            button.setAttribute('aria-checked', 'false');
+
+            const details = document.createElement('span');
+            details.className = 'duration-details';
+
+            const durationCopy = document.createElement('span');
+            durationCopy.className = 'duration-copy';
+
+            const label = document.createElement('span');
+            label.className = 'duration-label';
+            label.textContent = duration.label;
+
+            const accessLabel = document.createElement('span');
+            accessLabel.className = 'duration-access';
+            accessLabel.textContent = `${duration.months} ${duration.months === 1 ? 'month' : 'months'} access`;
+
+            const priceCopy = document.createElement('span');
+            priceCopy.className = 'duration-price-copy';
+
+            const price = document.createElement('span');
+            price.className = 'duration-price';
+            price.textContent = formatPrice(duration.price);
+
+            const monthly = document.createElement('span');
+            monthly.className = 'duration-monthly';
+            monthly.textContent = `${formatPrice(duration.price / duration.months)}/mo`;
+
+            durationCopy.append(label, accessLabel);
+            priceCopy.append(price, monthly);
+            details.append(durationCopy, priceCopy);
+            button.append(details);
+
+            if (duration.badge) {
+                button.classList.add('best-value');
+                const badge = document.createElement('span');
+                badge.className = 'best-value-badge';
+                badge.textContent = duration.badge;
+                button.append(badge);
+            }
+
+            button.addEventListener('click', () => selectDuration(duration));
+            durationOptions.append(button);
+        });
+
+        const preferredDuration = plan.durations[plan.durations.length - 1];
+        selectDuration(preferredDuration);
+
+        planChoices.forEach((choice) => {
+            const isSelected = choice.dataset.plan === selectedPlanId;
+            choice.classList.toggle('active', isSelected);
+            choice.setAttribute('aria-checked', String(isSelected));
+        });
+
+        subscriptionWorkspace.classList.remove('is-revealing');
+        void subscriptionWorkspace.offsetWidth;
+        subscriptionWorkspace.classList.add('is-revealing');
+    }
+
+    planChoices.forEach((choice) => {
+        choice.addEventListener('click', () => {
+            renderPlan(choice.dataset.plan);
+            if (hasAutoScrolledToOptions) return;
+            hasAutoScrolledToOptions = true;
+
+            window.setTimeout(() => {
+                if (window.matchMedia('(max-width: 576px)').matches) {
+                    const workspaceTop = window.scrollY
+                        + subscriptionWorkspace.getBoundingClientRect().top
+                        - 115;
+                    glideTo(workspaceTop, 1100);
+                    return;
+                }
+
+                glideTo(window.scrollY + Math.min(450, window.innerHeight * 0.42), 1100);
+            }, 120);
         });
     });
 
